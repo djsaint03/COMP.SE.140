@@ -1,0 +1,10 @@
+#ignore package json files
+*package.json
+
+*package-lock.json
+
+node_modules/
+
+.venv
+.env
+
