@@ -1,0 +1,8 @@
+Containers in summary packages up code in addition to the neccessary depencies so the application can run quickly from one computer enviornment to another. 
+This means by default containers are lightweight and stand alone executable packages. 
+A lightweight container is structured to use its host Operating system Kernel which enables it not to require an OS per application
+A container also uses part of the Hosts filesystem , with the use of mounts or volumes , it could access direcotries from the host
+A container will often share the hosts network interface. networks could be isolated for containers but it could also just be attached to the host network
+Memory  resources will be share with the host  since containers dont have dedicated Randome Acess Mermory (RAM)
+CPU resources as similar to RAM  is shared by the host, containers could be restricted on how much processing resource is used though, but without limit it can use as much processing power as allowed by the Host
+Since containers also dont have dedicated disk storage. Storage capacity will be taken/ shared with the Host. They could be managed by docker volumes if configured. 
