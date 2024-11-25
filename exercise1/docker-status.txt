@@ -1,12 +1,19 @@
 ❯ docker container ls
-CONTAINER ID   IMAGE                COMMAND                  CREATED          STATUS          PORTS                    NAMES
-74ec8412f974   exercise1-service1   "python service1.py"     35 minutes ago   Up 35 minutes   0.0.0.0:8199->8199/tcp   exercise1-service1-1
-153619f1a499   exercise1-service2   "docker-entrypoint.s…"   35 minutes ago   Up 35 minutes                            exercise1-service2-1
+CONTAINER ID   IMAGE                COMMAND                  CREATED         STATUS         PORTS                     NAMES
+d45abb21f8ec   nginx:latest         "/docker-entrypoint.…"   2 minutes ago   Up 2 minutes   0.0.0.0:8198->80/tcp      nginx_load-balancer
+f478a60ad1d6   exercise1-service1   "python service1.py"     2 minutes ago   Up 2 minutes   0.0.0.0:49303->8199/tcp   exercise1-service1-3
+eb2ce6d8356c   exercise1-service1   "python service1.py"     2 minutes ago   Up 2 minutes   0.0.0.0:49304->8199/tcp   exercise1-service1-2
+6ea8561e26e8   exercise1-service1   "python service1.py"     2 minutes ago   Up 2 minutes   0.0.0.0:49306->8199/tcp   exercise1-service1-1
+b3dd4fc98ead   exercise1-service2   "docker-entrypoint.s…"   2 minutes ago   Up 2 minutes                             exercise1-service2-1
+
+
+
 ❯ docker network ls
 NETWORK ID     NAME                 DRIVER    SCOPE
-1c7b4b2ec52b   bridge               bridge    local
-efbafd0742a1   exercise1_default    bridge    local
+566243f3252e   bridge               bridge    local
+abe90418a0cf   demo_default         bridge    local
+4aed3a2d68fc   dockerprd_default    bridge    local
+78e9f9931cdf   exercise1_default    bridge    local
 ed7fa7e268bc   host                 host      local
 d09eac9556d5   none                 null      local
-5e508b46fa5c   postgresdb_default   bridge    local
-❯ ls
+5e508b46fa5c   postgresdb_default   bridge    local  
