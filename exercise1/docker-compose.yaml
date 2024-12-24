@@ -1,5 +1,5 @@
 # docker-compose.yaml
-version: '3'
+
 services:
   nginx:
     image: nginx:alpine
@@ -13,8 +13,6 @@ services:
 
     depends_on:
       - service1
-
-
 
 
   service1:

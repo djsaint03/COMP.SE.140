@@ -1,8 +1,11 @@
 import os
 import json
+import signal
 import  requests
+import socket
 import time
 from flask import Flask
+
 
 
 app=Flask(__name__)
@@ -43,7 +46,7 @@ def system_info():
 @app.route('/stop', methods=['POST'])
 def stop_containers():
 #still trying to make stop request
-    os.system("kill ")
+    os.kill(os.getpid(), signal.SIGINT)
     return "Stopping containers...", 200
 
 
