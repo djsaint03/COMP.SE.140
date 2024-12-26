@@ -28,7 +28,7 @@ build:
     # Login to Docker Hub (optional, if pushing to Docker registry)
     - echo "Building and starting all services..."
     # starting services from docker-compose
-    - docker-compose up -d --build
+    - docker-compose -f exercise1/docker-compose.yml up -d --build
     - echo "WAITING FOR ALL SERVICES TO READY UP!!"
     - sleep 15
     - docker-compose ps #verifying services are running
