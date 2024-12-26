@@ -9,6 +9,9 @@ variables:
 
 # Step 1: Build the Docker container
 build:
+  tags:
+    - projectcicd
+    - 2nd trygit
   stage: build
   image: docker:latest
   services:
