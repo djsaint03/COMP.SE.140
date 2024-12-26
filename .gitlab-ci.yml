@@ -5,36 +5,43 @@ stages:
 
 variables:
   # Define the default Docker image for pipeline jobs
-  DOCKER_IMAGE: flask-app:latest
+  DOCKER_HOST: "tcp://docker:2375"
+  DOCKER_DRIVER: overlay2
+
+services:
+  - docker:dind
+
+before_script:
+  # Install Docker-Compose to manage services
+  - apk add --no-cache docker-compose
+
 
 # Step 1: Build the Docker container
 build:
   tags:
-    - projectcicd
-    - 2nd try
+    - mbp_main
+
   stage: build
   image: docker:latest
-  services:
-    - docker:dind
+
   script:
     # Login to Docker Hub (optional, if pushing to Docker registry)
-    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-    # Build the Docker image
-    - docker build -t $DOCKER_IMAGE .
-    # (Optional) Push the image to Docker Hub
-    - docker tag $DOCKER_IMAGE $DOCKER_USERNAME/$DOCKER_IMAGE
-    - docker push $DOCKER_USERNAME/$DOCKER_IMAGE
+    - echo "Building and starting all services..."
+    # starting services from docker-compose
+    - docker-compose up -d --build
+    - echo "WAITING FOR ALL SERVICES TO READY UP!!"
+    - sleep 15
+    - docker-compose ps #verifying services are running
   only:
     - exercise4  # Perform this step only on the listed branch
 
 # Step 2: Run tests for the Flask application
 test:
   stage: test
-  image: python:3.9
-  script:
-    # Install requirements
+  image: python:3.9-bullseye
+  before_script:
     - pip install -r requirements.txt
-    # Run the test suite (pytest)
+  script:
     - pytest tests/ --disable-warnings
   only:
     - exercise4
