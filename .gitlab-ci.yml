@@ -11,7 +11,7 @@ variables:
 build:
   tags:
     - projectcicd
-    - 2nd trygit
+    - 2nd try
   stage: build
   image: docker:latest
   services:
