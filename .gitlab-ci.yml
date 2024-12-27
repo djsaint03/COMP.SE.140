@@ -3,31 +3,34 @@ stages:
   - test
   - deploy
 
-variables:
-  # Define the default Docker image for pipeline jobs
-  DOCKER_HOST: "tcp://docker:2375"
-  DOCKER_DRIVER: overlay2
-  DOCKER_TLS_CERTDIR: ""
-
-services:
-  - docker:dind
-  - command:["--tls=false"]
-
-before_script:
-  # Install Docker-Compose to manage services
-  - apk add --no-cache docker-compose
-
-# Step 1: Build the Docker container
 build:
   tags:
     - mbp_main
 
   stage: build
   image: docker:20.10.16
+  services:
+    - docker:dind
+    - command:["--tls=false"]
+
+  variables:
+    # Define the default Docker image for pipeline jobs
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: ""
+
+  before_script:
+    # Login to Docker Hub
+    - apk add --no-cache docker-compose # Install Docker-Compose to manage services
+    - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+
 
 
   script:
-    # Login to Docker Hub (optional, if pushing to Docker registry)
+    - echo "Testing Docker daemon connection..."
+    - docker info  # Ensure Docker daemon is reachable
+    - echo "Checking Docker Compose version..."
+    - docker-compose version  # Ensure docker-compose is installed properly
     - echo "Building and starting all services..."
     # starting services from docker-compose
     - docker-compose -f exercise1/docker-compose.yaml up -d --build
