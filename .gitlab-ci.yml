@@ -1,30 +1,6 @@
 stages:
-  - test
   - build
-
-# Step 2: Run tests for the Flask application
-test:
-  tags:
-    - mbp_main
-  stage: test
-  image: python:3.9-bullseye
-
-  variables:
-    # Define the default Docker image for pipeline jobs
-    DOCKER_HOST: "tcp://docker:2375"
-    DOCKER_DRIVER: overlay2
-    DOCKER_TLS_CERTDIR: ""
-
-  before_script:
-    - apk add --no-cache docker-compose # Install Docker-Compose to manage services
-    - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-    - python -m pip install --upgrade pip
-    - pip install -r requirements.txt
-  script:
-    - echo "starting testing......."
-    - python -m pytest tests/ --disable-warnings
-  only:
-    - exercise4
+  - test
 
 build:
   tags:
@@ -48,7 +24,6 @@ build:
     - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 
 
-
   script:
     - echo "Testing Docker daemon connection..."
     - docker info  # Ensure Docker daemon is reachable
@@ -63,3 +38,17 @@ build:
   only:
     - exercise4  # Perform this step only on the listed branch
 
+# Step 2: Run tests for the Flask application
+test:
+  tags:
+    - mbp_main
+  stage: test
+  image: python:3.9-bullseye
+  before_script:
+    - python -m pip install --upgrade pip
+    - pip install -r requirements.txt
+  script:
+    - echo "starting testing......."
+    - python -m pytest tests/ --disable-warnings
+  only:
+    - exercise4
