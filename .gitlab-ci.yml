@@ -27,8 +27,6 @@ build:
 
 
   script:
-    - echo "testing docker connection and verion....."
-    - curl http://docker:2375/v1.47/version
     # Login to Docker Hub (optional, if pushing to Docker registry)
     - echo "Building and starting all services..."
     # starting services from docker-compose
