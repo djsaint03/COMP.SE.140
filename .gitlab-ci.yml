@@ -1,7 +1,21 @@
 stages:
-  - build
   - test
+  - build
 
+# Step 2: Run tests for the Flask application
+test:
+  tags:
+    - mbp_main
+  stage: test
+  image: python:3.9-bullseye
+  before_script:
+    - python -m pip install --upgrade pip
+    - pip install -r requirements.txt
+  script:
+    - echo "starting testing......."
+    - python -m pytest tests/ --disable-warnings
+  only:
+    - exercise4
 
 build:
   tags:
@@ -40,16 +54,3 @@ build:
   only:
     - exercise4  # Perform this step only on the listed branch
 
-# Step 2: Run tests for the Flask application
-test:
-  tags:
-    - mbp_main
-  stage: test
-  image: python:3.9-bullseye
-  before_script:
-    - pip install -r requirements.txt
-  script:
-    - echo "starting testing......."
-    - pytest tests/ --disable-warnings
-  only:
-    - exercise4
