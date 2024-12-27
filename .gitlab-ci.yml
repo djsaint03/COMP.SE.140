@@ -7,9 +7,11 @@ variables:
   # Define the default Docker image for pipeline jobs
   DOCKER_HOST: "tcp://docker:2375"
   DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: ""
 
 services:
   - docker:dind
+  - command:["--tls=false"]
 
 before_script:
   # Install Docker-Compose to manage services
@@ -21,7 +23,8 @@ build:
     - mbp_main
 
   stage: build
-  image: docker:latest
+  image: docker:20.10.16
+
 
   script:
     - echo "testing docker connection and verion....."
