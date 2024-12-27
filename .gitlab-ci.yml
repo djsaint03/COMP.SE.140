@@ -51,6 +51,6 @@ test:
   script:
     - echo "starting testing......."
     - ls -la
-    - pytest ./tests --disable-warnings
+    - pytest exercise1/tests --disable-warnings
   only:
     - exercise4
