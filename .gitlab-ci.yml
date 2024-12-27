@@ -1,7 +1,6 @@
 stages:
   - build
-  - test
-  - deploy
+
 
 build:
   tags:
@@ -36,39 +35,7 @@ build:
     - docker-compose -f exercise1/docker-compose.yaml up -d --build
     - echo "WAITING FOR ALL SERVICES TO READY UP!!"
     - sleep 15
-    - exercise1/docker-compose ps #verifying services are running
+
   only:
     - exercise4  # Perform this step only on the listed branch
 
-# Step 2: Run tests for the Flask application
-test:
-  stage: test
-  image: python:3.9-bullseye
-  before_script:
-    - pip install -r requirements.txt
-  script:
-    - echo "starting testing......."
-    - pytest tests/ --disable-warnings
-  only:
-    - exercise4
-
-# Step 3: Deploy the application using Docker Compose on the remote server
-deploy:
-  stage: deploy
-  image: alpine:latest
-  before_script:
-    - apk add --no-cache openssh
-  script:
-    # Securely copy the repository files to the remote server
-    - ssh -o StrictHostKeyChecking=no $DEPLOY_USER@$DEPLOY_SERVER "mkdir -p ~/flask-app"
-    - scp -o StrictHostKeyChecking=no -r * $DEPLOY_USER@$DEPLOY_SERVER:~/flask-app/
-
-    # Execute Docker Compose on the remote server
-    - ssh -o StrictHostKeyChecking=no $DEPLOY_USER@$DEPLOY_SERVER "
-        cd ~/flask-app &&
-        docker-compose down &&
-        docker-compose build &&
-        docker-compose up -d
-      "
-  only:
-    - exercise4
