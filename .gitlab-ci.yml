@@ -42,6 +42,8 @@ build:
 
 # Step 2: Run tests for the Flask application
 test:
+  tags:
+    - mbp_main
   stage: test
   image: python:3.9-bullseye
   before_script:
