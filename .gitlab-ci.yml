@@ -36,7 +36,7 @@ build:
     - docker-compose -f exercise1/docker-compose.yaml up -d --build
     - echo "WAITING FOR ALL SERVICES TO READY UP!!"
     - sleep 15
-    - docker-compose ps #verifying services are running
+    - exercise1/docker-compose ps #verifying services are running
   only:
     - exercise4  # Perform this step only on the listed branch
 
