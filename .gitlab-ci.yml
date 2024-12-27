@@ -15,7 +15,6 @@ before_script:
   # Install Docker-Compose to manage services
   - apk add --no-cache docker-compose
 
-
 # Step 1: Build the Docker container
 build:
   tags:
@@ -25,6 +24,9 @@ build:
   image: docker:latest
 
   script:
+    - echo "testing docker connection and verion....."
+    - ping docker
+    - curl http://docker:2375/v1.47/version
     # Login to Docker Hub (optional, if pushing to Docker registry)
     - echo "Building and starting all services..."
     # starting services from docker-compose
@@ -42,6 +44,7 @@ test:
   before_script:
     - pip install -r requirements.txt
   script:
+    - echo "starting testing......."
     - pytest tests/ --disable-warnings
   only:
     - exercise4
