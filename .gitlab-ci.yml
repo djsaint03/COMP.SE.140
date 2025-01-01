@@ -1,6 +1,7 @@
 stages:
   - build
   - test
+  - deploy
 
 build:
   tags:
@@ -25,10 +26,9 @@ build:
 
 
   script:
-    - echo "Testing Docker daemon connection..."
     - docker info  # Ensure Docker daemon is reachable
     - echo "Checking Docker Compose version..."
-    - docker-compose version  # Ensure docker-compose is installed properly
+    - docker-compose version
     - echo "Building and starting all services..."
     # starting services from docker-compose
     - docker-compose -f exercise1/docker-compose.yaml up -d --build
@@ -52,5 +52,28 @@ test:
     - echo "starting testing......."
     - ls -la
     - pytest exercise1/tests --disable-warnings
+  only:
+    - exercise4
+
+deploy:
+  tags:
+    - mbp_main
+
+  stage: deploy
+  image: docker:20.10.16
+  services:
+    - docker:dind
+    - command:["--tls=false"]
+
+  before_script:
+    # Login to Docker Hub
+    - apk add --no-cache docker-compose # Install Docker-Compose to manage services
+    - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+
+  script:
+    - echo "Deploying application for local testing..."
+    - docker-compose -f exercise/docker-compose.yaml up -d
+    - echo "Application deployed, Containers running on local machine.."
+
   only:
     - exercise4
