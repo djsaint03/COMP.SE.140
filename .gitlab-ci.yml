@@ -72,7 +72,7 @@ deploy:
 
   script:
     - echo "Deploying application for local testing..."
-    - docker-compose -f exercise/docker-compose.yaml up -d
+    - docker-compose -f exercise1/docker-compose.yaml up -d
     - echo "Application deployed, Containers running on local machine.."
 
   only:
