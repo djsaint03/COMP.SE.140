@@ -60,20 +60,11 @@ deploy:
     - mbp_main
 
   stage: deploy
-  image: docker:20.10.16
-  services:
-    - docker:dind
-    - command:["--tls=false"]
-
-  before_script:
-    # Login to Docker Hub
-    - apk add --no-cache docker-compose # Install Docker-Compose to manage services
-    - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-
   script:
-    - echo "Deploying application for local testing..."
-    - docker-compose -f exercise1/docker-compose.yaml up -d
-    - echo "Application deployed, Containers running on local machine.."
+    - ssh -o StrictHostKeyChecking=no-i deployssh_key ubuntu@86.50.230.81 "
+        docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD &&
+        docker-compose -f exercise1/docker-compose.yaml up -d --build
+        docker run -p 5000:5000
+        echo "current level"
+      "
 
-  only:
-    - exercise4
