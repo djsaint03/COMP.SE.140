@@ -32,8 +32,8 @@ build:
     - docker-compose version
     - echo "Building and starting all services..."
     # starting services from docker-compose
-    - docker-compose -f exercise1/docker-compose.yaml up -d --build
-    - docker tag exercise1-service1 $IMAGE_NAME:$IMAGE_TAG
+    - docker-compose -f exercise1/docker-compose.yaml up build
+    - docker tag nginx:alpine $IMAGE_NAME:$IMAGE_TAG
     - docker push $IMAGE_NAME:$IMAGE_TAG
     - echo "WAITING FOR ALL SERVICES TO READY UP!!"
     - sleep 15
