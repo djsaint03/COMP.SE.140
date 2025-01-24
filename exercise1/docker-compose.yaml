@@ -2,7 +2,8 @@
 
 services:
   nginx:
-    image: nginx:alpine
+    build: ./nginx
+    image: djsaint03/comp.se.140:latest
     container_name: service_load-balancer
     ports:
       - "8198:80"  # Expose only NGINX on port 8081 80:80
