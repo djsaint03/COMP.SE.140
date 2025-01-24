@@ -9,7 +9,7 @@ variables:
   DOCKER_DRIVER: overlay2
   DOCKER_TLS_CERTDIR: ""
   IMAGE_NAME: djsaint03/comp.se.140
-  IMAGE_TAG: devopsproj
+  IMAGE_TAG: tagname
 
 build:
   tags:
