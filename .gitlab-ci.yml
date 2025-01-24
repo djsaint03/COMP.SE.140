@@ -33,7 +33,13 @@ build:
     - echo "Building and starting all services..."
     # starting services from docker-compose
     - docker-compose -f exercise1/docker-compose.yaml build
-    - docker push $IMAGE_NAME:$IMAGE_TAG
+    - |
+      # Extract and push each service image
+      for service in $(docker-compose -f exercise1/docker-compose.yaml config --services); do
+        IMAGE=$(docker-compose -f exercise1/docker-compose.yaml images -q $service)
+        docker tag $IMAGE $DOCKER_USERNAME/$service:$CI_COMMIT_SHORT_SHA
+        docker push $DOCKER_USERNAME/$service:$CI_COMMIT_SHORT_SHA
+      done
     - sleep 15
 
   only:
