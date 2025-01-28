@@ -31,7 +31,7 @@ build:
     - echo "Checking Docker Compose version..."
     - docker-compose version
     - echo "Building and starting all services..."
-    # starting services from docker-compose
+    # starting services from docker-compose and pushing to dockerhub repo
     - docker-compose -f exercise1/docker-compose.yaml build
     - docker-compose -f exercise1/docker-compose.yaml push
 
@@ -62,12 +62,16 @@ deploy:
     - mbp_main
 
   stage: deploy
+
   script:
-    - ssh -o StrictHostKeyChecking=no -i deployssh_key ubuntu@86.50.230.81 "
+    - ssh -o StrictHostKeyChecking=no -i $deployssh_key ubuntu@86.50.230.81 "
         docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD &&
-        docker pull $IMAGE_NAME:$IMAGE_TAG &&
+        docker-compose -f exercise1/docker-compose.yaml pull &&
         docker-compose -f exercise1/docker-compose.yaml down &&
-        docker-compose -f exercise1/docker-compose.yaml up -d --build
+        docker-compose -f exercise1/docker-compose.yaml up -d
         echo "current level"
       "
+  needs: [ "build" ]  # Wait for build stage
+  only:
+    - exercise4
 
