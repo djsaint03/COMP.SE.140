@@ -62,14 +62,14 @@ deploy:
     - mbp_main
 
   stage: deploy
-  image: alpine:latest  # Lightweight image for SSH/SCP
   before_script:
+    - apk update && apk add --no-cache openssh-client
     - chmod 400 $deployssh_key
 
   script:
 
     #deployment via ssh
-    - ssh -o StrictHostKeyChecking=no -i $deployssh_key ubuntu@86.50.230.81 "
+    - ssh -o StrictHostKeyChecking=no -i $deployssh_key $vmuser@$vm_IP "
         docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD &&
         docker-compose ps -aq | xargs docker-compose stop | xargs docker-compose rm &&
         docker-compose run -d -p exercise1/docker-compose.yaml 
