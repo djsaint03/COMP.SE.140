@@ -67,12 +67,12 @@ deploy:
     - chmod 400 $deployssh_key
 
   script:
-
     #deployment via ssh
     - ssh -o StrictHostKeyChecking=no -i $deployssh_key $vmuser@$vm_IP "
-        docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD &&
-        docker-compose ps -aq | xargs docker-compose stop | xargs docker-compose rm &&
-        docker-compose run -d -p exercise1/docker-compose.yaml 
+      docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD &&
+      docker-compose -f exercise1/docker-compose.yaml down &&
+      docker-compose -f exercise1/docker-compose.yaml pull &&
+      docker-compose -f exercise1/docker-compose.yaml up -d 
       "
   needs: [ "build" ]  # Wait for build stage
   only:
