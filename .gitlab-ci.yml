@@ -64,24 +64,15 @@ deploy:
   stage: deploy
   image: alpine:latest  # Lightweight image for SSH/SCP
   before_script:
-    - apk add --no-cache openssh-client gettext
+    - chmod 400 $deployssh_key
 
   script:
-    # Process docker-compose with current tags
-    - envsubst < exercise1/docker-compose.yaml > docker-compose-deploy.yaml
-
-    # Copying compose file & configs to VM
-    - scp -o StrictHostKeyChecking=no -i $deployssh_key docker-compose-deploy.yaml ubuntu@86.50.230.81:~/exercise1/docker-compose.yaml
-    - scp -o StrictHostKeyChecking=no -i $deployssh_key exercise1/nginx.conf ubuntu@86.50.230.81:~/exercise1/
-    - scp -r -o StrictHostKeyChecking=no -i $deployssh_key exercise1/html ubuntu@86.50.230.81:~/exercise1/
 
     #deployment via ssh
     - ssh -o StrictHostKeyChecking=no -i $deployssh_key ubuntu@86.50.230.81 "
         docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD &&
-        docker-compose -f exercise1/docker-compose.yaml pull &&
-        docker-compose -f exercise1/docker-compose.yaml down &&
-        docker-compose -f exercise1/docker-compose.yaml up -d
-        echo "current level"
+        docker-compose ps -aq | xargs docker-compose stop | xargs docker-compose rm &&
+        docker-compose run -d -p exercise1/docker-compose.yaml 
       "
   needs: [ "build" ]  # Wait for build stage
   only:
