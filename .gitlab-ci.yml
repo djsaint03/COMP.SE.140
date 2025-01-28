@@ -64,16 +64,19 @@ deploy:
   stage: deploy
   before_script:
     - apk update && apk add --no-cache openssh-client
-    - chmod 400 $deployssh_key
+    - mkdir -p ~/.ssh
+    - echo "$deployssh_key" > ~/.ssh/deploy_key
+    - chmod 600 ~/.ssh/deploy_key
 
   script:
     #deployment via ssh
     - ssh -o StrictHostKeyChecking=no -i $deployssh_key $vmuser@$vm_IP "
+      which docker-compose || echo 'Docker Compose missing!' &&
       docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD &&
       docker-compose -f exercise1/docker-compose.yaml down &&
       docker-compose -f exercise1/docker-compose.yaml pull &&
-      docker-compose -f exercise1/docker-compose.yaml up -d 
-      "
+      docker-compose -f exercise1/docker-compose.yaml up -d "
+
   needs: [ "build" ]  # Wait for build stage
   only:
     - exercise4
