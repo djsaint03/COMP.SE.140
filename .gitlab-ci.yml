@@ -9,7 +9,7 @@ variables:
   DOCKER_DRIVER: overlay2
   DOCKER_TLS_CERTDIR: ""
   IMAGE_NAME: djsaint03/comp.se.140
-  IMAGE_TAG: tagname
+  IMAGE_TAG: $CI_COMMIT_SHORT_SHA
 
 build:
   tags:
@@ -33,7 +33,7 @@ build:
     - echo "Building and starting all services..."
     # starting services from docker-compose
     - docker-compose -f exercise1/docker-compose.yaml build
-    - docker compose push djsaint03/comp.se.140:nginx
+    - docker-compose -f exercise1/docker-compose.yaml push
 
     - sleep 15
 
